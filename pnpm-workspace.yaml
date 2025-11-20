@@ -1,0 +1,4 @@
+packages:
+  - 'box-frontend'
+  - 'box-worker'
+  - 'box-worker-ely'

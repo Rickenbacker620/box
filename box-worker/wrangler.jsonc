@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "box-worker",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-11-11",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "counter-db",
+      "database_id": "local-only",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "files"
+    }
+  ]
+}
