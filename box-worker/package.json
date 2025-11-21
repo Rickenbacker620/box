@@ -20,7 +20,8 @@
     "@elysiajs/openapi": "latest",
     "drizzle-orm": "latest",
     "elysia": "latest",
-    "slugify": "^1.6.6"
+    "slugify": "^1.6.6",
+    "ulid": "^3.0.1"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",

@@ -2,7 +2,7 @@ import { Elysia, t, NotFoundError, InternalServerError, status } from 'elysia'
 import { eq } from 'drizzle-orm'
 import { getDb, brands, products } from './db'
 import { env } from 'cloudflare:workers'
-import slugify from 'slugify'
+import { ulid } from 'ulid'
 
 // Elysia TypeBox schemas for validation
 const brandSchema = t.Object({
@@ -31,15 +31,6 @@ const brandListResponseSchema = t.Object({
 const errorResponseSchema = t.Object({
   error: t.String(),
 })
-
-// Helper function to convert name to slug format using slugify library
-function nameToSlug(name: string): string {
-  return slugify(name, {
-    lower: true,      // Convert to lowercase
-    strict: true,     // Remove special characters
-    trim: true        // Trim whitespace
-  })
-}
 
 // Authentication plugin - validates Bearer token
 // Using 'scoped' to apply to parent, current instance and descendants
@@ -88,18 +79,18 @@ export const brandRoutes = new Elysia({ prefix: '/brands' })
     .post('/', async ({ body }) => {
       const db = getDb(env.DB)
 
-      // Generate ID from brand name
-      const id = nameToSlug(body.name)
+      // Generate ULID for new brand
+      const id = ulid()
 
-      // Check if ID already exists
+      // Check if brand name already exists
       const existing = await db
         .select({ id: brands.id })
         .from(brands)
-        .where(eq(brands.id, id))
+        .where(eq(brands.name, body.name))
         .get()
 
       if (existing) {
-        return status(409, `Brand with ID '${id}' already exists`)
+        return status(409, `Brand with name '${body.name}' already exists`)
       }
 
       try {
@@ -134,7 +125,7 @@ export const brandRoutes = new Elysia({ prefix: '/brands' })
         })
       },
       detail: {
-        description: 'Create a new brand with a name. The ID is automatically generated from the brand name.',
+        description: 'Create a new brand with a name. The ID is automatically generated as a ULID.',
         tags: ['Brands'],
       }
     })

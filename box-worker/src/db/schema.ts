@@ -2,13 +2,14 @@
 // This replaces the raw SQL schema with type-safe TypeScript definitions
 
 import { sqliteTable, text, integer, index } from 'drizzle-orm/sqlite-core'
+import { ulid } from 'ulid'
 
 // Define the brands table schema
 export const brands = sqliteTable(
   'brands',
   {
-    // Primary key: slug format like "frito-lay", "nongshim"
-    id: text('id').primaryKey(),
+    // Primary key: ULID format
+    id: text('id').primaryKey().$defaultFn(() => ulid()),
     
     // Display name: "Frito-Lay", "Nongshim"
     name: text('name').notNull().unique(),
@@ -23,8 +24,8 @@ export const brands = sqliteTable(
 export const products = sqliteTable(
   'products',
   {
-    // Primary key: slug format like "doritos-nacho-cheese"
-    id: text('id').primaryKey(),
+    // Primary key: ULID format
+    id: text('id').primaryKey().$defaultFn(() => ulid()),
     
     // Display name: "Doritos Nacho Cheese"
     name: text('name').notNull(),

@@ -2,7 +2,7 @@ import { Elysia, t, NotFoundError, InternalServerError, status } from 'elysia'
 import { eq, and, gte } from 'drizzle-orm'
 import { getDb, products, brands } from './db'
 import { env } from 'cloudflare:workers'
-import slugify from 'slugify'
+import { ulid } from 'ulid'
 import { PRODUCT_CATEGORIES, type ProductCategory } from './types'
 
 // Helper function to upload base64 image to R2 bucket
@@ -125,38 +125,16 @@ const errorResponseSchema = t.Object({
   error: t.String(),
 })
 
-// Helper function to convert name to slug format using slugify library
-function nameToSlug(name: string): string {
-  return slugify(name, {
-    lower: true,      // Convert to lowercase
-    strict: true,     // Remove special characters
-    trim: true        // Trim whitespace
-  })
-}
-
 // Helper function to get brand ID by name
 async function getBrandIdByName(db: ReturnType<typeof getDb>, brandName: string): Promise<string | null> {
-  const brandId = nameToSlug(brandName)
-  
-  // Check if brand exists by ID
+  // Check if brand exists by name
   const existing = await db
-    .select()
-    .from(brands)
-    .where(eq(brands.id, brandId))
-    .get()
-  
-  if (existing) {
-    return existing.id
-  }
-  
-  // Also check by name in case the slug is different
-  const existingByName = await db
     .select()
     .from(brands)
     .where(eq(brands.name, brandName))
     .get()
   
-  return existingByName?.id || null
+  return existing?.id || null
 }
 
 // Authentication plugin - validates Bearer token
@@ -182,9 +160,11 @@ export const productRoutes = new Elysia({ prefix: '/products' })
       // Build filter conditions
       const conditions = []
       if (brand) {
-        // Convert brand name to slug for lookup
-        const brandId = nameToSlug(brand)
-        conditions.push(eq(products.brandId, brandId))
+        // Look up brand by name
+        const brandId = await getBrandIdByName(db, brand)
+        if (brandId) {
+          conditions.push(eq(products.brandId, brandId))
+        }
       }
       if (category) {
         conditions.push(eq(products.category, category))
@@ -272,19 +252,8 @@ export const productRoutes = new Elysia({ prefix: '/products' })
     .post('/', async ({ body }) => {
       const db = getDb(env.DB)
 
-      // Generate ID from product name
-      const id = nameToSlug(body.name)
-
-      // Check if ID already exists
-      const existing = await db
-        .select({ id: products.id })
-        .from(products)
-        .where(eq(products.id, id))
-        .get()
-
-      if (existing) {
-        return status(409, `Product with ID '${id}' already exists`)
-      }
+      // Generate ULID for new product
+      const id = ulid()
 
       try {
         // Get brand ID - brand must exist
@@ -345,7 +314,7 @@ export const productRoutes = new Elysia({ prefix: '/products' })
         })
       },
       detail: {
-        description: 'Create a new product with name, brand, category, rating, and optional comment/image. Send image as base64 data URL in imageBase64 field. The ID is automatically generated from the product name.',
+        description: 'Create a new product with name, brand, category, rating, and optional comment/image. Send image as base64 data URL in imageBase64 field. The ID is automatically generated as a ULID.',
         tags: ['Products'],
       }
     })
@@ -463,7 +432,12 @@ export const productRoutes = new Elysia({ prefix: '/products' })
       }
 
       try {
-        // Delete the item
+        // Delete the image from R2 if it exists
+        if (existing.imageUrl) {
+          await env.BUCKET.delete(existing.imageUrl)
+        }
+
+        // Delete the item from database
         await db
           .delete(products)
           .where(eq(products.id, id))
