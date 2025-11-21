@@ -12,6 +12,7 @@ import {
   getBrandsQueryKey,
 } from './client/@tanstack/react-query.gen'
 import { client } from './client/client.gen'
+import { Button } from './components/ui/button'
 
 // Set up authentication
 client.setConfig({
@@ -219,18 +220,17 @@ function App() {
           <div className="card-body">
             <h2 className="card-title">Actions</h2>
             <div className="flex gap-3 flex-wrap">
-              <button
+              <Button
                 onClick={() => setIsProductModalOpen(true)}
-                className="btn btn-primary"
               >
                 Create Product
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setIsBrandModalOpen(true)}
-                className="btn btn-secondary"
+                variant="secondary"
               >
                 Create Brand
-              </button>
+              </Button>
             </div>
           </div>
         </section>
@@ -301,18 +301,20 @@ function App() {
                           )}
                         </div>
                         <div className="flex gap-2 shrink-0">
-                          <button
+                          <Button
                             onClick={() => handleUpdateProduct(product.id)}
-                            className="btn btn-sm btn-outline"
+                            variant="outline"
+                            size="sm"
                           >
                             Update
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             onClick={() => handleDeleteProduct(product.id)}
-                            className="btn btn-sm btn-outline btn-error"
+                            variant="destructive"
+                            size="sm"
                           >
                             Delete
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -352,12 +354,13 @@ function App() {
                           <h3 className="font-bold text-lg">{brand.name}</h3>
                           <p className="text-sm opacity-70 mt-1">ID: {brand.id}</p>
                         </div>
-                        <button
+                        <Button
                           onClick={() => handleDeleteBrand(brand.id)}
-                          className="btn btn-sm btn-outline btn-error"
+                          variant="destructive"
+                          size="sm"
                         >
                           Delete
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -375,12 +378,13 @@ function App() {
             <div className="card-body">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="card-title text-2xl">Create Product</h2>
-                <button
+                <Button
                   onClick={() => setIsProductModalOpen(false)}
-                  className="btn btn-sm btn-circle btn-ghost"
+                  variant="ghost"
+                  size="icon"
                 >
                   ✕
-                </button>
+                </Button>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -475,13 +479,15 @@ function App() {
                         alt="Preview"
                         className="w-32 h-32 object-cover rounded"
                       />
-                      <button
+                      <Button
                         type="button"
                         onClick={handleRemoveImage}
-                        className="btn btn-circle btn-error btn-xs absolute -top-2 -right-2"
+                        variant="destructive"
+                        size="icon"
+                        className="h-6 w-6 absolute -top-2 -right-2 rounded-full"
                       >
                         ✕
-                      </button>
+                      </Button>
                     </div>
                   ) : (
                     <div
@@ -517,20 +523,20 @@ function App() {
                 </fieldset>
 
                 <div className="flex gap-3 pt-4">
-                  <button
+                  <Button
                     type="submit"
                     disabled={createProductMutation.isPending}
-                    className="btn btn-primary flex-1"
+                    className="flex-1"
                   >
                     {createProductMutation.isPending ? 'Creating...' : 'Create Product'}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={() => setIsProductModalOpen(false)}
-                    className="btn btn-ghost"
+                    variant="ghost"
                   >
                     Cancel
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
@@ -545,12 +551,13 @@ function App() {
             <div className="card-body">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="card-title text-2xl">Create Brand</h2>
-                <button
+                <Button
                   onClick={() => setIsBrandModalOpen(false)}
-                  className="btn btn-sm btn-circle btn-ghost"
+                  variant="ghost"
+                  size="icon"
                 >
                   ✕
-                </button>
+                </Button>
               </div>
 
               <form onSubmit={handleBrandSubmit} className="space-y-4">
@@ -568,20 +575,20 @@ function App() {
                 </fieldset>
 
                 <div className="flex gap-3 pt-4">
-                  <button
+                  <Button
                     type="submit"
                     disabled={createBrandMutation.isPending}
-                    className="btn btn-primary flex-1"
+                    className="flex-1"
                   >
                     {createBrandMutation.isPending ? 'Creating...' : 'Create Brand'}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={() => setIsBrandModalOpen(false)}
-                    className="btn btn-ghost"
+                    variant="ghost"
                   >
                     Cancel
-                  </button>
+                  </Button>
                 </div>
               </form>
             </div>
