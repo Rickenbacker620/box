@@ -384,30 +384,26 @@ function App() {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Product Name *</span>
-                  </label>
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Product Name</legend>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="input input-bordered w-full"
+                    className="input"
                     placeholder="Enter product name"
                   />
-                </div>
+                </fieldset>
 
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Brand *</span>
-                  </label>
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Brand</legend>
                   {brands.length > 0 ? (
                     <select
                       required
                       value={formData.brand}
                       onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      className="select select-bordered w-full"
+                      className="select"
                     >
                       <option value="">Select a brand</option>
                       {brands.map((brand) => (
@@ -422,21 +418,19 @@ function App() {
                       required
                       value={formData.brand}
                       onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                      className="input input-bordered w-full"
+                      className="input"
                       placeholder="Enter brand name"
                     />
                   )}
-                </div>
+                </fieldset>
 
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Category *</span>
-                  </label>
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Category</legend>
                   <select
                     required
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value as Category })}
-                    className="select select-bordered w-full"
+                    className="select"
                   >
                     {CATEGORIES.map((cat) => (
                       <option key={cat} value={cat}>
@@ -444,12 +438,10 @@ function App() {
                       </option>
                     ))}
                   </select>
-                </div>
+                </fieldset>
 
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Rating * ({formData.rating}/5)</span>
-                  </label>
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Rating ({formData.rating}/5)</legend>
                   <input
                     type="range"
                     min="1"
@@ -460,80 +452,69 @@ function App() {
                     onChange={(e) => setFormData({ ...formData, rating: Number(e.target.value) })}
                     className="range range-primary"
                   />
-                  <div className="flex justify-between text-xs px-2 mt-2">
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                  </div>
-                </div>
+                </fieldset>
 
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Comment (optional)</span>
-                  </label>
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Comment</legend>
                   <textarea
                     value={formData.comment}
                     onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-                    className="textarea textarea-bordered resize-none"
+                    className="input resize-none"
                     rows={3}
                     placeholder="Add a comment about this product"
                   />
-                </div>
+                  <p className="label">Optional</p>
+                </fieldset>
 
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Product Image (optional)</span>
-                  </label>
-                  <div className="space-y-3">
-                    {imageBase64 ? (
-                      <div className="relative inline-block">
-                        <img
-                          src={imageBase64}
-                          alt="Preview"
-                          className="w-32 h-32 object-cover rounded"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleRemoveImage}
-                          className="btn btn-circle btn-error btn-xs absolute -top-2 -right-2"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    ) : (
-                      <div
-                        onPaste={handlePaste}
-                        className="relative"
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Product Image</legend>
+                  {imageBase64 ? (
+                    <div className="relative inline-block">
+                      <img
+                        src={imageBase64}
+                        alt="Preview"
+                        className="w-32 h-32 object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="btn btn-circle btn-error btn-xs absolute -top-2 -right-2"
                       >
-                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-base-300 rounded cursor-pointer hover:bg-base-200 transition-colors">
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg className="w-8 h-8 mb-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                            <p className="text-sm opacity-70">Click to upload or paste image</p>
-                            <p className="text-xs opacity-70 mt-1">PNG, JPG, WebP, GIF (max 5MB)</p>
-                          </div>
-                          <input
-                            type="file"
-                            className="hidden"
-                            accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
-                            onChange={handleImageChange}
-                          />
-                        </label>
-                        {/* Invisible input to capture paste events */}
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      onPaste={handlePaste}
+                      className="relative"
+                    >
+                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-base-300 rounded cursor-pointer hover:bg-base-200 transition-colors">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <svg className="w-8 h-8 mb-2 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                          <p className="text-sm opacity-70">Click to upload or paste image</p>
+                          <p className="text-xs opacity-70 mt-1">PNG, JPG, WebP, GIF (max 5MB)</p>
+                        </div>
                         <input
-                          type="text"
-                          className="absolute inset-0 opacity-0 cursor-pointer"
-                          onPaste={handlePaste}
-                          placeholder="Paste image here"
-                          readOnly
+                          type="file"
+                          className="hidden"
+                          accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                          onChange={handleImageChange}
                         />
-                      </div>
-                    )}
-                  </div>
-                </div>
+                      </label>
+                      {/* Invisible input to capture paste events */}
+                      <input
+                        type="text"
+                        className="absolute inset-0 opacity-0 cursor-pointer"
+                        onPaste={handlePaste}
+                        placeholder="Paste image here"
+                        readOnly
+                      />
+                    </div>
+                  )}
+                  <p className="label">Optional</p>
+                </fieldset>
 
                 <div className="flex gap-3 pt-4">
                   <button
@@ -573,22 +554,18 @@ function App() {
               </div>
 
               <form onSubmit={handleBrandSubmit} className="space-y-4">
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text">Brand Name *</span>
-                  </label>
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">Brand Name</legend>
                   <input
                     type="text"
                     required
                     value={brandFormData.name}
                     onChange={(e) => setBrandFormData({ name: e.target.value })}
-                    className="input input-bordered w-full"
+                    className="input"
                     placeholder="Enter brand name (e.g., Frito-Lay, Nongshim)"
                   />
-                  <label className="label">
-                    <span className="label-text-alt">The brand ID will be automatically generated from the name</span>
-                  </label>
-                </div>
+                  <p className="label">The brand ID will be automatically generated from the name</p>
+                </fieldset>
 
                 <div className="flex gap-3 pt-4">
                   <button
