@@ -9,6 +9,7 @@ export default defineConfig([
   globalIgnores(['dist']),
   {
     files: ['**/*.{ts,tsx}'],
+    ignores: ["openapi-ts.config.ts", "vite.config.ts", "src/client/**"],
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
@@ -18,6 +19,13 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parserOptions: {
+        project: "./tsconfig.app.json",
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+    rules: {
+      'react-refresh/only-export-components': 'off'
     },
   },
 ])
