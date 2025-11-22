@@ -9,12 +9,13 @@ import { CreateProductModal } from './components/products/CreateProductModal'
 import { ProductList } from './components/products/ProductList'
 import { ManageBrandsModal } from './components/brands/ManageBrandsModal'
 import { ModeToggle } from './components/mode-toggle'
+import { config } from './config'
 
 // Set up authentication
 client.setConfig({
-  baseUrl: 'https://box-worker.fu78sion-box.workers.dev',
+  baseUrl: config.apiBaseUrl,
   headers: {
-    Authorization: 'Bearer supersecret'
+    Authorization: `Bearer ${config.apiToken}`
   }
 })
 

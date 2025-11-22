@@ -8,6 +8,7 @@ import {
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import { Loader2 } from 'lucide-react'
+import { config } from '@/config'
 
 export function ProductList() {
   const queryClient = useQueryClient()
@@ -73,7 +74,7 @@ export function ProductList() {
               {product.imageUrl && (
                 <div className="shrink-0">
                   <img
-                    src={`https://box-worker.fu78sion-box.workers.dev/images/${product.imageUrl}`}
+                    src={`${config.apiBaseUrl}/images/${product.imageUrl}`}
                     alt={product.name}
                     className="w-24 h-24 object-cover rounded"
                   />
