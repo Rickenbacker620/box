@@ -4,7 +4,7 @@ import {
   putProductsByIdMutation,
   deleteProductsByIdMutation,
   getProductsQueryKey,
-} from '../../client/@tanstack/react-query.gen'
+} from '@/client/@tanstack/react-query.gen'
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import { Loader2 } from 'lucide-react'

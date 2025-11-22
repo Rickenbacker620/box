@@ -5,7 +5,7 @@ import {
   postBrandsMutation,
   deleteBrandsByIdMutation,
   getBrandsQueryKey,
-} from '../../client/@tanstack/react-query.gen'
+} from '@/client/@tanstack/react-query.gen'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Input } from '../ui/input'

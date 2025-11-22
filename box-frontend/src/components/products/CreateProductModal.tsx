@@ -4,7 +4,7 @@ import {
   postProductsMutation,
   getProductsQueryKey,
   getBrandsOptions,
-} from '../../client/@tanstack/react-query.gen'
+} from '@/client/@tanstack/react-query.gen'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
