@@ -11,7 +11,7 @@ export const PRODUCT_CATEGORIES = [
   'beauty',
   'household',
   'electronics',
-  'other'
+  'other',
 ] as const
 
 // TypeScript type derived from the array

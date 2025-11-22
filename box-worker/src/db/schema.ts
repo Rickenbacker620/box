@@ -10,14 +10,14 @@ export const brands = sqliteTable(
   {
     // Primary key: ULID format
     id: text('id').primaryKey().$defaultFn(() => ulid()),
-    
+
     // Display name: "Frito-Lay", "Nongshim"
     name: text('name').notNull().unique(),
   },
-  (table) => [
+  table => [
     // Index for name lookups
     index('idx_brands_name').on(table.name),
-  ]
+  ],
 )
 
 // Define the products table schema
@@ -26,30 +26,30 @@ export const products = sqliteTable(
   {
     // Primary key: ULID format
     id: text('id').primaryKey().$defaultFn(() => ulid()),
-    
+
     // Display name: "Doritos Nacho Cheese"
     name: text('name').notNull(),
-    
+
     // Foreign key to brands table (slug format)
     brandId: text('brand_id').notNull().references(() => brands.id),
-    
+
     // Category: "Chips", "Instant Noodles", "Cookies", "Fragrance", etc.
     category: text('category').notNull(),
-    
+
     // Rating: 1-5 scale (required)
     rating: integer('rating').notNull(),
-    
+
     // Optional personal notes/thoughts
     comment: text('comment'),
-    
+
     // Optional image URL for the product
     imageUrl: text('image_url'),
   },
-  (table) => [
+  table => [
     // Indexes for query performance
     index('idx_products_brand_id').on(table.brandId),
     index('idx_products_category').on(table.category),
-  ]
+  ],
 )
 
 // Type inference for insert operations

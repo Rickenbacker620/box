@@ -8,7 +8,7 @@ import { env } from 'cloudflare:workers'
 
 const app = new Elysia({
   aot: false,
-  normalize: false
+  normalize: false,
 })
   .use(cors())
 
@@ -16,7 +16,7 @@ const app = new Elysia({
   .use(openapi({
     documentation: {
       // Set version manaully to this, see: https://github.com/hey-api/openapi-ts/issues/2459
-      openapi: "3.1.0",
+      openapi: '3.1.0',
       info: {
         title: 'Product Box API',
         version: '1.0.0',
@@ -48,33 +48,33 @@ const app = new Elysia({
   .get('/categories', () => {
     return {
       categories: [...PRODUCT_CATEGORIES],
-      count: PRODUCT_CATEGORIES.length
+      count: PRODUCT_CATEGORIES.length,
     }
   }, {
     response: {
       200: t.Object({
         categories: t.Array(t.String()),
-        count: t.Number()
-      })
+        count: t.Number(),
+      }),
     },
     detail: {
       description: 'List all valid product categories',
-      tags: ['Categories']
-    }
+      tags: ['Categories'],
+    },
   })
 
   // GET /images/* - Serve images from R2 bucket (supports nested paths)
   .get('/images/*', async ({ params }) => {
     // Get the full path after /images/
     const key = params['*']
-    
+
     // Get object from R2
     const object = await env.BUCKET.get(key)
-    
+
     if (!object) {
       throw new NotFoundError(`Image '${key}' not found`)
     }
-    
+
     // Return the image with appropriate headers
     return new Response(object.body, {
       headers: {
@@ -84,12 +84,12 @@ const app = new Elysia({
     })
   }, {
     params: t.Object({
-      '*': t.String()
+      '*': t.String(),
     }),
     detail: {
       description: 'Serve an image from R2 storage (supports nested paths like products/image.png)',
-      tags: ['Images']
-    }
+      tags: ['Images'],
+    },
   })
 
 export default app.compile()
