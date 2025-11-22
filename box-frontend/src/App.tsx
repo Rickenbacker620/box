@@ -8,7 +8,6 @@ import { Badge } from './components/ui/badge'
 import { CreateProductModal } from './components/products/CreateProductModal'
 import { ProductList } from './components/products/ProductList'
 import { ManageBrandsModal } from './components/brands/ManageBrandsModal'
-import { ThemeProvider } from './components/theme-provider'
 import { ModeToggle } from './components/mode-toggle'
 
 // Set up authentication
@@ -19,7 +18,7 @@ client.setConfig({
   }
 })
 
-function AppContent() {
+function App() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false)
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false)
 
@@ -86,14 +85,6 @@ function AppContent() {
       <CreateProductModal open={isProductModalOpen} onOpenChange={setIsProductModalOpen} />
       <ManageBrandsModal open={isBrandModalOpen} onOpenChange={setIsBrandModalOpen} />
     </div>
-  )
-}
-
-function App() {
-  return (
-    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-      <AppContent />
-    </ThemeProvider>
   )
 }
 
