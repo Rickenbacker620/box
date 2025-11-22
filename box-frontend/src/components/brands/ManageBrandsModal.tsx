@@ -6,12 +6,14 @@ import {
   deleteBrandsByIdMutation,
   getBrandsQueryKey,
 } from '@/client/@tanstack/react-query.gen'
+import type { DeleteBrandsByIdError } from '@/client/types.gen'
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Loader2, X } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface ManageBrandsModalProps {
   open: boolean
@@ -39,6 +41,14 @@ export function ManageBrandsModal({ open, onOpenChange }: ManageBrandsModalProps
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: getBrandsQueryKey() })
       setBrandToDelete(null)
+      toast.success('Brand deleted successfully')
+    },
+    onError: (error: DeleteBrandsByIdError) => {
+      if ('status' in error && error.status === 409) {
+        toast.error('Cannot delete brand. It still has associated products.')
+      } else {
+        toast.error('Failed to delete brand. Please try again.')
+      }
     },
   })
 
