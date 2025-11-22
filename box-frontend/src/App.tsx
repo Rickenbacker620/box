@@ -8,6 +8,8 @@ import { Badge } from './components/ui/badge'
 import { CreateProductModal } from './components/products/CreateProductModal'
 import { ProductList } from './components/products/ProductList'
 import { ManageBrandsModal } from './components/brands/ManageBrandsModal'
+import { ThemeProvider } from './components/theme-provider'
+import { ModeToggle } from './components/mode-toggle'
 
 // Set up authentication
 client.setConfig({
@@ -17,7 +19,7 @@ client.setConfig({
   }
 })
 
-function App() {
+function AppContent() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false)
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false)
 
@@ -30,8 +32,13 @@ function App() {
       {/* Header */}
       <header className="bg-card shadow border-b">
         <div className="max-w-4xl mx-auto px-6 py-6">
-          <h1 className="text-3xl font-bold">Product Manager</h1>
-          <p className="text-muted-foreground mt-1">Manage your product catalog</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">Product Manager</h1>
+              <p className="text-muted-foreground mt-1">Manage your product catalog</p>
+            </div>
+            <ModeToggle />
+          </div>
         </div>
       </header>
 
@@ -79,6 +86,14 @@ function App() {
       <CreateProductModal open={isProductModalOpen} onOpenChange={setIsProductModalOpen} />
       <ManageBrandsModal open={isBrandModalOpen} onOpenChange={setIsBrandModalOpen} />
     </div>
+  )
+}
+
+function App() {
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <AppContent />
+    </ThemeProvider>
   )
 }
 
