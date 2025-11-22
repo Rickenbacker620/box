@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   getProductsOptions,
@@ -9,10 +10,23 @@ import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import { Loader2, Star } from 'lucide-react'
 import { config } from '@/config'
+import { UpdateProductModal } from './UpdateProductModal'
+
+type Product = {
+  id: string
+  name: string
+  brand: string
+  category: string
+  rating: number
+  comment?: string | null
+  imageUrl?: string | null
+}
 
 export function ProductList() {
   const queryClient = useQueryClient()
   const { data: productsData, isLoading: productsLoading } = useQuery(getProductsOptions())
+  const [updateModalOpen, setUpdateModalOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   const updateProductMutation = useMutation({
     ...putProductsByIdMutation(),
@@ -28,14 +42,9 @@ export function ProductList() {
     },
   })
 
-  const handleUpdateProduct = (id: string) => {
-    updateProductMutation.mutate({
-      path: { id },
-      body: {
-        rating: 5,
-        comment: 'Updated to 5 stars',
-      },
-    })
+  const handleUpdateClick = (product: Product) => {
+    setSelectedProduct(product)
+    setUpdateModalOpen(true)
   }
 
   const handleDeleteProduct = (id: string) => {
@@ -108,7 +117,7 @@ export function ProductList() {
               </div>
               <div className="flex gap-2 shrink-0">
                 <Button
-                  onClick={() => handleUpdateProduct(product.id)}
+                  onClick={() => handleUpdateClick(product)}
                   variant="outline"
                   size="sm"
                 >
@@ -126,6 +135,11 @@ export function ProductList() {
           </CardContent>
         </Card>
       ))}
+      <UpdateProductModal
+        open={updateModalOpen}
+        onOpenChange={setUpdateModalOpen}
+        product={selectedProduct}
+      />
     </div>
   )
 }
