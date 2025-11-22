@@ -84,14 +84,15 @@ export function ManageBrandsModal({ open, onOpenChange }: ManageBrandsModalProps
                       className="text-sm py-1.5 px-3 cursor-default flex items-center gap-2 hover:bg-secondary/80"
                     >
                       <span>{brand.name}</span>
-                      <button
+                      <Button
                         type="button"
+                        variant="ghost"
                         onClick={() => handleDeleteBrandClick(brand.id)}
-                        className="ml-1 hover:bg-destructive/20 rounded-full p-0.5 transition-colors"
+                        className="size-2"
                         aria-label={`Remove ${brand.name}`}
                       >
                         <X className="h-3 w-3" />
-                      </button>
+                      </Button>
                     </Badge>
                   ))}
                 </div>
