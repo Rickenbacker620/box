@@ -7,7 +7,7 @@ import {
 } from '@/client/@tanstack/react-query.gen'
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Star } from 'lucide-react'
 import { config } from '@/config'
 
 export function ProductList() {
@@ -88,18 +88,19 @@ export function ProductList() {
                   <span className="capitalize">{product.category}</span>
                 </div>
                 <div className="mt-2 flex items-center gap-2">
-                  <div className="rating rating-sm">
+                  <div className="flex">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <input
+                      <Star
                         key={star}
-                        type="radio"
-                        className="mask mask-star-2 bg-warning"
-                        checked={star === product.rating}
-                        readOnly
+                        className={`h-4 w-4 ${
+                          star <= (product.rating || 0)
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-gray-300'
+                        }`}
                       />
                     ))}
                   </div>
-                  <span className="text-sm">({product.rating}/5)</span>
+                  <span className="text-sm">({product.rating || 0}/5)</span>
                 </div>
                 {product.comment && (
                   <p className="mt-2 text-sm text-muted-foreground italic">{product.comment}</p>
