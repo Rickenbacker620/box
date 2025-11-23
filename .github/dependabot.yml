@@ -11,37 +11,6 @@ updates:
           - "*"
     labels:
       - "dependencies"
-      - "root"
-
-  - package-ecosystem: "npm"
-    directory: "/box-frontend"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    groups:
-      all-dependencies:
-        patterns:
-          - "*"
-    commit-message:
-      prefix: "chore(frontend)"
-    labels:
-      - "dependencies"
-      - "frontend"
-
-  - package-ecosystem: "npm"
-    directory: "/box-worker"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-    groups:
-      all-dependencies:
-        patterns:
-          - "*"
-    commit-message:
-      prefix: "chore(worker)"
-    labels:
-      - "dependencies"
-      - "worker"
 
   - package-ecosystem: "github-actions"
     directory: "/"
