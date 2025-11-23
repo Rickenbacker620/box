@@ -1,0 +1,11 @@
+{
+  "name": "box",
+  "private": true,
+  "scripts": {
+    "deploy:frontend": "wrangler pages deploy box-frontend/dist --project-name=box-frontend",
+    "deploy:worker": "cd box-worker && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.90.0"
+  }
+}
