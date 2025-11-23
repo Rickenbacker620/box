@@ -8,6 +8,7 @@ import {
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
+import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Star } from 'lucide-react'
@@ -46,6 +47,7 @@ interface UpdateProductModalProps {
 export function UpdateProductModal({ open, onOpenChange, product }: UpdateProductModalProps) {
   const queryClient = useQueryClient()
   const [formData, setFormData] = useState({
+    name: '',
     brand: '',
     category: 'food' as Category,
     rating: 5,
@@ -67,6 +69,7 @@ export function UpdateProductModal({ open, onOpenChange, product }: UpdateProduc
   useEffect(() => {
     if (product && open) {
       setFormData({
+        name: product.name || '',
         brand: product.brand || '',
         category: (product.category as Category) || 'food',
         rating: product.rating || 5,
@@ -82,6 +85,7 @@ export function UpdateProductModal({ open, onOpenChange, product }: UpdateProduc
     updateProductMutation.mutate({
       path: { id: product.id },
       body: {
+        name: formData.name,
         brand: formData.brand,
         category: formData.category,
         rating: formData.rating,
@@ -104,11 +108,15 @@ export function UpdateProductModal({ open, onOpenChange, product }: UpdateProduc
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label>Product Name</Label>
-            <div className="p-2 border border-border rounded bg-muted/50">
-              <p className="text-sm font-medium">{product.name}</p>
-            </div>
-            <p className="text-sm text-muted-foreground">Product name cannot be changed</p>
+            <Label htmlFor="name">Product Name</Label>
+            <Input
+              id="name"
+              type="text"
+              required
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Enter product name"
+            />
           </div>
 
           <div className="space-y-2">
