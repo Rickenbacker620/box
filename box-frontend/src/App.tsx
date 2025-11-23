@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getProductsOptions } from './client/@tanstack/react-query.gen'
-import { client } from './client/client.gen'
 import { Button } from './components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
 import { Badge } from './components/ui/badge'
@@ -9,23 +8,25 @@ import { CreateProductModal } from './components/products/CreateProductModal'
 import { ProductList } from './components/products/ProductList'
 import { ManageBrandsModal } from './components/brands/ManageBrandsModal'
 import { ModeToggle } from './components/mode-toggle'
-import { config } from './config'
-
-// Set up authentication
-client.setConfig({
-  baseUrl: config.apiBaseUrl,
-  headers: {
-    Authorization: `Bearer ${config.apiToken}`
-  }
-})
+import { ApiTokenInput } from './components/ApiTokenInput'
+import { useApiToken } from './hooks/useApiToken'
 
 function App() {
+  const { token, saveToken, hasToken } = useApiToken()
   const [isProductModalOpen, setIsProductModalOpen] = useState(false)
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false)
 
-  const { data: productsData } = useQuery(getProductsOptions())
+  const { data: productsData } = useQuery({
+    ...getProductsOptions(),
+    enabled: !!token // Only fetch data if we have a token
+  })
 
   const products = productsData?.products || []
+
+  // Show API token input if no token is available
+  if (!hasToken) {
+    return <ApiTokenInput onTokenSubmit={saveToken} />
+  }
 
   return (
     <div className="min-h-screen bg-background">

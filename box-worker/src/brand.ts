@@ -3,6 +3,7 @@ import { eq } from 'drizzle-orm'
 import { getDb, brands, products } from './db'
 import { env } from 'cloudflare:workers'
 import { ulid } from 'ulid'
+import { auth } from './auth'
 
 // Elysia TypeBox schemas for validation
 const brandSchema = t.Object({
@@ -31,18 +32,6 @@ const brandListResponseSchema = t.Object({
 const errorResponseSchema = t.Object({
   error: t.String(),
 })
-
-// Authentication plugin - validates Bearer token
-// Using 'scoped' to apply to parent, current instance and descendants
-const auth = new Elysia({ name: 'auth' })
-  .onBeforeHandle({ as: 'scoped' }, ({ request }) => {
-    const authHeader = request.headers.get('authorization') || request.headers.get('Authorization')
-    const expectedPassword = 'supersecret'
-
-    if (!authHeader || authHeader !== `Bearer ${expectedPassword}`) {
-      return status(401, 'Invalid or missing authentication token')
-    }
-  })
 
 // Brand routes plugin with authentication
 export const brandRoutes = new Elysia({ prefix: '/brands' })

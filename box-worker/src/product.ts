@@ -4,6 +4,7 @@ import { getDb, products, brands } from './db'
 import { env } from 'cloudflare:workers'
 import { ulid } from 'ulid'
 import { PRODUCT_CATEGORIES } from './types'
+import { auth } from './auth'
 
 // Helper function to upload base64 image to R2 bucket
 async function uploadBase64ImageToR2(
@@ -136,18 +137,6 @@ async function getBrandIdByName(db: ReturnType<typeof getDb>, brandName: string)
 
   return existing?.id || null
 }
-
-// Authentication plugin - validates Bearer token
-// Using 'scoped' to apply to parent, current instance and descendants
-const auth = new Elysia({ name: 'auth' })
-  .onBeforeHandle({ as: 'scoped' }, ({ request }) => {
-    const authHeader = request.headers.get('authorization') || request.headers.get('Authorization')
-    const expectedPassword = env.AUTH_TOKEN
-
-    if (!authHeader || authHeader !== `Bearer ${expectedPassword}`) {
-      return status(401, 'Invalid or missing authentication token')
-    }
-  })
 
 // Product routes plugin with authentication
 export const productRoutes = new Elysia({ prefix: '/products' })
