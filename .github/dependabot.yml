@@ -4,16 +4,26 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    groups:
+      all:
+        patterns:
+          - "*"
     labels:
       - "dependencies"
+      - "root"
 
   - package-ecosystem: "npm"
     directory: "/box-frontend"
     schedule:
       interval: "weekly"
+      day: "monday"
     groups:
-      all:
-        patterns: ["*"]
+      all-dependencies:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "chore(frontend)"
     labels:
       - "dependencies"
       - "frontend"
@@ -22,9 +32,13 @@ updates:
     directory: "/box-worker"
     schedule:
       interval: "weekly"
+      day: "monday"
     groups:
-      all:
-        patterns: ["*"]
+      all-dependencies:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "chore(worker)"
     labels:
       - "dependencies"
       - "worker"
@@ -33,5 +47,10 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    groups:
+      all-actions:
+        patterns:
+          - "*"
     labels:
       - "dependencies"
+      - "github-actions"
