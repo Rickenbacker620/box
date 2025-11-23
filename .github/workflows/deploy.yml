@@ -41,7 +41,7 @@ jobs:
           packageManager: pnpm
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy box-frontend/dist --project-name=box-frontend
+          command: pages deploy box-frontend/dist --project-name=box
 
       - name: Deploy Worker
         uses: cloudflare/wrangler-action@v3
