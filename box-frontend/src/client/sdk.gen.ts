@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { DeleteBrandsByIdData, DeleteBrandsByIdErrors, DeleteBrandsByIdResponses, DeleteProductsByIdData, DeleteProductsByIdErrors, DeleteProductsByIdResponses, GetBrandsData, GetBrandsResponses, GetCategoriesData, GetCategoriesResponses, GetImagesByKeyData, GetProductsByIdData, GetProductsByIdErrors, GetProductsByIdResponses, GetProductsData, GetProductsResponses, PostBrandsData, PostBrandsErrors, PostBrandsResponses, PostProductsData, PostProductsErrors, PostProductsResponses, PutProductsByIdData, PutProductsByIdErrors, PutProductsByIdResponses } from './types.gen';
+import type { DeleteBrandsByIdData, DeleteBrandsByIdErrors, DeleteBrandsByIdResponses, DeleteProductsByIdData, DeleteProductsByIdErrors, DeleteProductsByIdResponses, GetBrandsData, GetBrandsResponses, GetCategoriesData, GetCategoriesResponses, GetImagesData, GetProductsByIdData, GetProductsByIdErrors, GetProductsByIdResponses, GetProductsData, GetProductsResponses, PostBrandsData, PostBrandsErrors, PostBrandsResponses, PostProductsData, PostProductsErrors, PostProductsResponses, PutProductsByIdData, PutProductsByIdErrors, PutProductsByIdResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -21,123 +21,78 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * List all products with optional filtering by brand, category, or minimum rating
  */
-export const getProducts = <ThrowOnError extends boolean = false>(options?: Options<GetProductsData, ThrowOnError>) => {
-    return (options?.client ?? client).get<GetProductsResponses, unknown, ThrowOnError>({
-        security: [
-            {
-                scheme: 'bearer',
-                type: 'http'
-            }
-        ],
-        url: '/products/',
-        ...options
-    });
-};
+export const getProducts = <ThrowOnError extends boolean = false>(options?: Options<GetProductsData, ThrowOnError>) => (options?.client ?? client).get<GetProductsResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/products/',
+    ...options
+});
 
 /**
- * Create a new product with name, brand, category, rating, and optional comment/image. Send image as base64 data URL in imageBase64 field. The ID is automatically generated from the product name.
+ * Create a new product with name, brand, category, rating, and optional comment/image. Send image as base64 data URL in imageBase64 field. The ID is automatically generated as a ULID.
  */
-export const postProducts = <ThrowOnError extends boolean = false>(options: Options<PostProductsData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostProductsResponses, PostProductsErrors, ThrowOnError>({
-        url: '/products/',
-        ...options,
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers
-        }
-    });
-};
+export const postProducts = <ThrowOnError extends boolean = false>(options: Options<PostProductsData, ThrowOnError>) => (options.client ?? client).post<PostProductsResponses, PostProductsErrors, ThrowOnError>({
+    url: '/products/',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Delete a product by its ID
  */
-export const deleteProductsById = <ThrowOnError extends boolean = false>(options: Options<DeleteProductsByIdData, ThrowOnError>) => {
-    return (options.client ?? client).delete<DeleteProductsByIdResponses, DeleteProductsByIdErrors, ThrowOnError>({
-        url: '/products/{id}',
-        ...options
-    });
-};
+export const deleteProductsById = <ThrowOnError extends boolean = false>(options: Options<DeleteProductsByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteProductsByIdResponses, DeleteProductsByIdErrors, ThrowOnError>({ url: '/products/{id}', ...options });
 
 /**
  * Get a specific product by its ID (slug format)
  */
-export const getProductsById = <ThrowOnError extends boolean = false>(options: Options<GetProductsByIdData, ThrowOnError>) => {
-    return (options.client ?? client).get<GetProductsByIdResponses, GetProductsByIdErrors, ThrowOnError>({
-        url: '/products/{id}',
-        ...options
-    });
-};
+export const getProductsById = <ThrowOnError extends boolean = false>(options: Options<GetProductsByIdData, ThrowOnError>) => (options.client ?? client).get<GetProductsByIdResponses, GetProductsByIdErrors, ThrowOnError>({ url: '/products/{id}', ...options });
 
 /**
  * Update an existing product by ID with partial data. Send image as base64 data URL in imageBase64 field.
  */
-export const putProductsById = <ThrowOnError extends boolean = false>(options: Options<PutProductsByIdData, ThrowOnError>) => {
-    return (options.client ?? client).put<PutProductsByIdResponses, PutProductsByIdErrors, ThrowOnError>({
-        url: '/products/{id}',
-        ...options,
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers
-        }
-    });
-};
+export const putProductsById = <ThrowOnError extends boolean = false>(options: Options<PutProductsByIdData, ThrowOnError>) => (options.client ?? client).put<PutProductsByIdResponses, PutProductsByIdErrors, ThrowOnError>({
+    url: '/products/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * List all brands ordered by name
  */
-export const getBrands = <ThrowOnError extends boolean = false>(options?: Options<GetBrandsData, ThrowOnError>) => {
-    return (options?.client ?? client).get<GetBrandsResponses, unknown, ThrowOnError>({
-        security: [
-            {
-                scheme: 'bearer',
-                type: 'http'
-            }
-        ],
-        url: '/brands/',
-        ...options
-    });
-};
+export const getBrands = <ThrowOnError extends boolean = false>(options?: Options<GetBrandsData, ThrowOnError>) => (options?.client ?? client).get<GetBrandsResponses, unknown, ThrowOnError>({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/brands/',
+    ...options
+});
 
 /**
- * Create a new brand with a name. The ID is automatically generated from the brand name.
+ * Create a new brand with a name. The ID is automatically generated as a ULID.
  */
-export const postBrands = <ThrowOnError extends boolean = false>(options: Options<PostBrandsData, ThrowOnError>) => {
-    return (options.client ?? client).post<PostBrandsResponses, PostBrandsErrors, ThrowOnError>({
-        url: '/brands/',
-        ...options,
-        headers: {
-            'Content-Type': 'application/json',
-            ...options.headers
-        }
-    });
-};
+export const postBrands = <ThrowOnError extends boolean = false>(options: Options<PostBrandsData, ThrowOnError>) => (options.client ?? client).post<PostBrandsResponses, PostBrandsErrors, ThrowOnError>({
+    url: '/brands/',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Delete a brand by its ID. Cannot delete brands with associated products.
  */
-export const deleteBrandsById = <ThrowOnError extends boolean = false>(options: Options<DeleteBrandsByIdData, ThrowOnError>) => {
-    return (options.client ?? client).delete<DeleteBrandsByIdResponses, DeleteBrandsByIdErrors, ThrowOnError>({
-        url: '/brands/{id}',
-        ...options
-    });
-};
+export const deleteBrandsById = <ThrowOnError extends boolean = false>(options: Options<DeleteBrandsByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteBrandsByIdResponses, DeleteBrandsByIdErrors, ThrowOnError>({ url: '/brands/{id}', ...options });
 
 /**
  * List all valid product categories
  */
-export const getCategories = <ThrowOnError extends boolean = false>(options?: Options<GetCategoriesData, ThrowOnError>) => {
-    return (options?.client ?? client).get<GetCategoriesResponses, unknown, ThrowOnError>({
-        url: '/categories',
-        ...options
-    });
-};
+export const getCategories = <ThrowOnError extends boolean = false>(options?: Options<GetCategoriesData, ThrowOnError>) => (options?.client ?? client).get<GetCategoriesResponses, unknown, ThrowOnError>({ url: '/categories', ...options });
 
 /**
- * Serve an image from R2 storage
+ * Serve an image from R2 storage (supports nested paths like products/image.png)
  */
-export const getImagesByKey = <ThrowOnError extends boolean = false>(options: Options<GetImagesByKeyData, ThrowOnError>) => {
-    return (options.client ?? client).get<unknown, unknown, ThrowOnError>({
-        url: '/images/{key}',
-        ...options
-    });
-};
+export const getImages = <ThrowOnError extends boolean = false>(options: Options<GetImagesData, ThrowOnError>) => (options.client ?? client).get<unknown, unknown, ThrowOnError>({ url: '/images/*', ...options });

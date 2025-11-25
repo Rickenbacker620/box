@@ -38,7 +38,7 @@ export type PostProductsData = {
     body: {
         name: string;
         brand: string;
-        category: 'food' | 'snack' | 'ice-cream' | 'drink' | 'fragrance' | 'personal-care' | 'beauty' | 'household' | 'electronics' | 'other';
+        category: 'food' | 'snack' | 'ice-cream' | 'drink' | 'fragrance' | 'personal-care' | 'beauty' | 'household' | 'electronics' | 'instant' | 'yogurt' | 'other';
         rating: number;
         comment?: string;
         /**
@@ -167,7 +167,7 @@ export type PutProductsByIdData = {
     body: {
         name?: string;
         brand?: string;
-        category?: 'food' | 'snack' | 'ice-cream' | 'drink' | 'fragrance' | 'personal-care' | 'beauty' | 'household' | 'electronics' | 'other';
+        category?: 'food' | 'snack' | 'ice-cream' | 'drink' | 'fragrance' | 'personal-care' | 'beauty' | 'household' | 'electronics' | 'instant' | 'yogurt' | 'other';
         rating?: number;
         comment?: string;
         /**
@@ -337,11 +337,11 @@ export type GetCategoriesResponses = {
 
 export type GetCategoriesResponse = GetCategoriesResponses[keyof GetCategoriesResponses];
 
-export type GetImagesByKeyData = {
+export type GetImagesData = {
     body?: never;
     path: {
-        key: string;
+        '*': string;
     };
     query?: never;
-    url: '/images/{key}';
+    url: '/images/*';
 };

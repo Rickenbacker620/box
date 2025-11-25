@@ -11,6 +11,8 @@ export const PRODUCT_CATEGORIES = [
   'beauty',
   'household',
   'electronics',
+  'instant',
+  'yogurt',
   'other',
 ] as const
 

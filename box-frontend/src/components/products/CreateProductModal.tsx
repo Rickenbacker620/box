@@ -11,21 +11,8 @@ import { Label } from '../ui/label'
 import { Textarea } from '../ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
-
-const CATEGORIES = [
-  'food',
-  'snack',
-  'ice-cream',
-  'drink',
-  'fragrance',
-  'personal-care',
-  'beauty',
-  'household',
-  'electronics',
-  'other',
-] as const
-
-type Category = typeof CATEGORIES[number]
+import { PRODUCT_CATEGORIES } from '@/constants'
+import type { ProductCategory } from '@/constants'
 
 interface CreateProductModalProps {
   open: boolean
@@ -37,7 +24,7 @@ export function CreateProductModal({ open, onOpenChange }: CreateProductModalPro
   const [formData, setFormData] = useState({
     name: '',
     brand: '',
-    category: 'food' as Category,
+    category: 'food' as ProductCategory,
     rating: 5,
     comment: '',
   })
@@ -167,13 +154,13 @@ export function CreateProductModal({ open, onOpenChange }: CreateProductModalPro
             <Select
               required
               value={formData.category}
-              onValueChange={(value) => setFormData({ ...formData, category: value as Category })}
+              onValueChange={(value) => setFormData({ ...formData, category: value as ProductCategory })}
             >
               <SelectTrigger id="category">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map((cat) => (
+                {PRODUCT_CATEGORIES.map((cat) => (
                   <SelectItem key={cat} value={cat}>
                     {cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                   </SelectItem>

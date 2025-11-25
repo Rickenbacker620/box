@@ -12,21 +12,8 @@ import { Input } from '../ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Star } from 'lucide-react'
-
-const CATEGORIES = [
-  'food',
-  'snack',
-  'ice-cream',
-  'drink',
-  'fragrance',
-  'personal-care',
-  'beauty',
-  'household',
-  'electronics',
-  'other',
-] as const
-
-type Category = typeof CATEGORIES[number]
+import { PRODUCT_CATEGORIES } from '@/constants'
+import type { ProductCategory } from '@/constants'
 
 interface Product {
   id: string
@@ -49,7 +36,7 @@ export function UpdateProductModal({ open, onOpenChange, product }: UpdateProduc
   const [formData, setFormData] = useState({
     name: '',
     brand: '',
-    category: 'food' as Category,
+    category: 'food' as ProductCategory,
     rating: 5,
     comment: '',
   })
@@ -71,7 +58,7 @@ export function UpdateProductModal({ open, onOpenChange, product }: UpdateProduc
       setFormData({
         name: product.name || '',
         brand: product.brand || '',
-        category: (product.category as Category) || 'food',
+        category: (product.category as ProductCategory) || 'food',
         rating: product.rating || 5,
         comment: product.comment || '',
       })
@@ -155,13 +142,13 @@ export function UpdateProductModal({ open, onOpenChange, product }: UpdateProduc
             <Select
               required
               value={formData.category}
-              onValueChange={(value) => setFormData({ ...formData, category: value as Category })}
+              onValueChange={(value) => setFormData({ ...formData, category: value as ProductCategory })}
             >
               <SelectTrigger id="category">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map((cat) => (
+                {PRODUCT_CATEGORIES.map((cat) => (
                   <SelectItem key={cat} value={cat}>
                     {cat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                   </SelectItem>
