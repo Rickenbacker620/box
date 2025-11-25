@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   getProductsOptions,
@@ -22,7 +22,12 @@ type Product = {
   imageUrl?: string | null
 }
 
-export function ProductList() {
+interface ProductListProps {
+  selectedBrand?: string
+  selectedCategory?: string
+}
+
+export function ProductList({ selectedBrand, selectedCategory }: ProductListProps) {
   const queryClient = useQueryClient()
   const { data: productsData, isLoading: productsLoading } = useQuery(getProductsOptions())
   const [updateModalOpen, setUpdateModalOpen] = useState(false)
@@ -55,7 +60,18 @@ export function ProductList() {
     }
   }
 
-  const products = productsData?.products || []
+  const allProducts = productsData?.products || []
+  
+  // Filter products based on selected brand and category
+  const filteredProducts = useMemo(() => {
+    return allProducts.filter(product => {
+      const matchesBrand = selectedBrand === undefined || product.brand === selectedBrand
+      const matchesCategory = selectedCategory === undefined || product.category === selectedCategory
+      return matchesBrand && matchesCategory
+    })
+  }, [allProducts, selectedBrand, selectedCategory])
+
+  const products = filteredProducts
   const isLoading = productsLoading || updateProductMutation.isPending || deleteProductMutation.isPending
 
   if (isLoading) {

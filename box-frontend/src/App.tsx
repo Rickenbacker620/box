@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
 import { Badge } from './components/ui/badge'
 import { CreateProductModal } from './components/products/CreateProductModal'
 import { ProductList } from './components/products/ProductList'
+import { ProductFilters } from './components/products/ProductFilters'
 import { ManageBrandsModal } from './components/brands/ManageBrandsModal'
 import { ModeToggle } from './components/mode-toggle'
 import { ApiTokenInput } from './components/ApiTokenInput'
@@ -15,6 +16,8 @@ function App() {
   const { token, saveToken, hasToken } = useApiToken()
   const [isProductModalOpen, setIsProductModalOpen] = useState(false)
   const [isBrandModalOpen, setIsBrandModalOpen] = useState(false)
+  const [selectedBrand, setSelectedBrand] = useState<string | undefined>(undefined)
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined)
 
   const { data: productsData } = useQuery({
     ...getProductsOptions(),
@@ -77,8 +80,20 @@ function App() {
               </Badge>
             </div>
           </CardHeader>
-          <CardContent>
-            <ProductList />
+          <CardContent className="space-y-4">
+            {/* Filters */}
+            <ProductFilters
+              selectedBrand={selectedBrand}
+              selectedCategory={selectedCategory}
+              onBrandChange={setSelectedBrand}
+              onCategoryChange={setSelectedCategory}
+            />
+            
+            {/* Product List */}
+            <ProductList
+              selectedBrand={selectedBrand}
+              selectedCategory={selectedCategory}
+            />
           </CardContent>
         </Card>
 
