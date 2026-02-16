@@ -17,19 +17,19 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
-    "@elysiajs/openapi": "^1.4.13",
+    "@elysiajs/openapi": "^1.4.14",
     "drizzle-orm": "^0.45.1",
-    "elysia": "^1.4.19",
+    "elysia": "^1.4.25",
     "ulid": "^3.0.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "@stylistic/eslint-plugin": "^5.6.1",
-    "@types/node": "^25.0.3",
-    "drizzle-kit": "^0.31.8",
-    "eslint": "^9.39.2",
-    "globals": "^16.5.0",
-    "typescript-eslint": "^8.51.0",
-    "wrangler": "^4.54.0"
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.8.0",
+    "@types/node": "^25.2.3",
+    "drizzle-kit": "^0.31.9",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0",
+    "typescript-eslint": "^8.56.0",
+    "wrangler": "^4.65.0"
   }
 }
