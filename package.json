@@ -6,6 +6,6 @@
     "deploy:worker": "cd box-worker && wrangler deploy"
   },
   "devDependencies": {
-    "wrangler": "^4.68.0"
+    "wrangler": "^4.85.0"
   }
 }
