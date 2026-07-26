@@ -16,7 +16,6 @@ Run from the repo root.
 - `pnpm build` — typecheck (`tsc -b`) then `vite build`
 - `pnpm lint` / `pnpm lint:fix` — ESLint
 - `pnpm preview` — preview a production build locally
-- `pnpm deploy` — deploy `dist/` to Cloudflare Pages via wrangler
 
 There is no test runner configured.
 
@@ -38,4 +37,4 @@ There is no test runner configured.
 
 ## Deployment
 
-`.github/workflows/deploy.yml` deploys on push to `main`: installs deps, runs `pnpm run build`, and deploys `dist/` to Cloudflare Pages (project `fu78sion-box`) via `wrangler-action`.
+`.github/workflows/deploy.yml` deploys on push to `main`: installs deps, runs `pnpm run build`, then uploads `dist/` as a Pages artifact and deploys it via `actions/deploy-pages`. Hosted on GitHub Pages (repo Settings → Pages → Source: GitHub Actions), not Cloudflare. `vite.config.ts` sets `base: '/box/'` to match the GitHub Pages project-page path — update it if the repo is ever renamed or moved to a custom domain/user page.

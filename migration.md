@@ -6,7 +6,7 @@
 
 将项目的数据层从 Cloudflare Worker + D1 + R2 迁移到 Supabase：
 
-- 前端仍部署在免费的 Cloudflare Pages。
+- 前端部署在免费的静态托管上（最初计划是 Cloudflare Pages，2026-07-26 改成了 GitHub Pages，见下面「已完成：部署迁移到 GitHub Pages」）。
 - 浏览器直接使用 Supabase JS 读取 PostgreSQL 与 Storage。
 - 前端保持只读；新增、修改、删除数据由可信工具或 AI 通过受保护的 Supabase 权限完成。
 - 迁移完成后不再需要 Worker 充当前端 API。
@@ -15,7 +15,7 @@
 目标架构：
 
 ```text
-Cloudflare Pages 上的 React 前端
+GitHub Pages 上的 React 前端
         ├── Supabase Postgres（brands / products）
         └── Supabase Storage（box-assets）
 ```
@@ -138,6 +138,31 @@ R2 图片已迁移到 Supabase Storage：
 - Cloudflare Worker 部署、D1 数据库、R2 bucket 均未被删除或修改，仍然是可用的回滚路径，只是本地已经没有 `box-worker/` 源码可以重新部署它们了——回滚该 Worker 需要先决定是否要重建/找回源码，或者接受直接切回旧的前端 build（如果还留着）。
 - 如果之后确实需要回滚到 Worker 架构，`git log` 中仍能找到删除前的 `box-worker/` 版本（前提是这些改动被提交后才删除，而不是在同一次未提交的工作区改动里被覆盖——目前这些改动都还没有提交）。
 
+## 已完成：merge 到 main
+
+2026-07-26，用户确认后：
+
+- 把 `codex/supabase-migration` fast-forward merge 进 `main`（`main` 从 `6dd5f5f` 直接前进到 `d8d3b5b`），并 push 到 `origin/main`。
+- 这一次 push 触发的还是当时的 CI（wrangler 部署到 Cloudflare Pages），因为 GitHub Pages 切换是在 merge **之后**才做的（见下一节）。
+
+## 已完成：部署迁移到 GitHub Pages
+
+2026-07-26，用户决定放弃 Cloudflare Pages，改用 GitHub Pages（仓库已经切换成 public，用户接受 Supabase URL/publishable key 公开——这本来就是预期行为，安全边界是 RLS 而不是 URL 保密，见 CLAUDE.md）：
+
+- `vite.config.ts` 新增 `base: '/box/'`，匹配 GitHub Pages 项目页的路径（`https://<user>.github.io/box/`）。这个仓库没有用 client-side 路由，所以不需要处理 SPA 404 fallback。
+- `.github/workflows/deploy.yml` 从 `cloudflare/wrangler-action` 换成 `actions/upload-pages-artifact` + `actions/deploy-pages`，权限改成 `pages: write` / `id-token: write`，不再需要 `CLOUDFLARE_API_TOKEN`/`CLOUDFLARE_ACCOUNT_ID` 这两个 repo secret。
+- 顺带把 `pnpm/action-setup` 的版本从 `10.28.2` 改成了 `11.17.0`（用户要求不要再纠结跟旧版本对齐，直接换成本地默认在用的新版本）。
+- 从 `package.json` 里删掉了 `deploy` 脚本（`wrangler pages deploy ...`）和 `wrangler` 依赖，因为不再需要用 wrangler 部署任何东西（Worker 源码已经删过了，Pages 现在也不用它）。
+- `wrangler` 是 `sharp`/`workerd` 这两个原生构建依赖的唯一来源，删掉 wrangler 后这两个包也从依赖树里消失了；`pnpm-workspace.yaml` 里的 `onlyBuiltDependencies`/`allowBuilds` 相应精简为只剩 `esbuild`。
+- 验证：`pnpm install`（系统默认 11.17.0）、`pnpm lint`、`pnpm build` 全部通过；构建产物里的资源路径确认带 `/box/` 前缀（`grep -o '/box/assets[^"]*' dist/index.html`）。
+
+**还没做的**：
+
+- 仓库 Settings → Pages → Build and deployment → Source 需要手动切成「GitHub Actions」（没有 `gh` CLI 或 token，这一步只能用户自己在网页上点一下）。
+- 上面这些改动还没有 commit/push（当前在 `main` 分支，工作区未提交）。
+- 没有再跑一次真正的 GitHub Pages 部署验证（工作流没跑过，只在本地验证了 build 产物）。
+- Cloudflare Pages 项目 `fu78sion-box` 还没决定要不要弃用/删除，Cloudflare Worker/D1/R2 依然按原计划保留作为回滚路径（与 GitHub Pages 无关，见「暂时不要做」）。
+
 ## 已完成：验证
 
 在当前未提交代码上：
@@ -166,9 +191,9 @@ R2 图片已迁移到 Supabase Storage：
    - **进度**：已经用 curl 模拟浏览器请求（带 `Origin` header）验证过 Supabase REST 查询、`brands` join、CORS 头，并确认 `pnpm dev` 能正常起服务、返回 200；但**还没有做真正的浏览器可视化检查**（没有 Playwright/截图工具），需要人工在浏览器里跑一遍。
 3. 将已落地的 Supabase schema、约束、RLS policy 和 Storage 设置补成仓库内可追踪的 migration 文件。远程 schema 已经存在，处理 migration history 时不要重复执行破坏性 DDL。
 4. 检查 Supabase Security/Performance Advisors，处理与本次 schema 直接相关的问题。
-5. 在用户明确同意后再 commit、push，并部署一个 Cloudflare Pages 预览版本。
-6. 对预览环境重复 smoke test，并与当前线上 Worker 版本对照。
-7. 验证通过后合并到 `main`，由修改后的 workflow 发布仅包含前端的正式版本。
+5. ~~在用户明确同意后再 commit、push，并部署一个 Cloudflare Pages 预览版本~~——已改变计划：用户在 2026-07-26 决定改用 GitHub Pages（不再是 Cloudflare Pages），并已把 `codex/supabase-migration` merge/push 到 `main`（见「已完成：merge 到 main」）。GitHub Pages 切换的代码改动见「已完成：部署迁移到 GitHub Pages」，但**还没 commit/push，也还没在仓库 Settings 里把 Pages source 切成 GitHub Actions，也没跑过一次真正的部署**。
+6. 待办：commit 并 push 这次 GitHub Pages 的改动，用户手动把 repo Settings → Pages → Source 切成「GitHub Actions」，然后看一次真实的 Actions 部署 + 访问 `https://<user>.github.io/box/` 做 smoke test（页面、筛选、图片、console 有没有报错）。
+7. Cloudflare Pages 项目 `fu78sion-box` 是否要弃用/删除，需要用户单独决定（不影响 Worker/D1/R2 的回滚计划）。
 8. ~~稳定运行一段时间后，再单独征得用户授权，决定是否删除 box-worker/ 源码和根目录 Worker 脚本~~——用户已在 2026-07-26 提前明确授权，`box-worker/` 源码和根目录 `deploy:worker` 脚本已删除（见上面「已完成：worker 源码删除与仓库拍平」）。**仍然待用户单独授权**才能删除的是云端资源：
    - Cloudflare Worker deployment
    - D1 database
