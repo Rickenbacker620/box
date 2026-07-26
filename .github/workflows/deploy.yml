@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare
+name: Deploy Frontend to Cloudflare Pages
 on:
   push:
     branches:
@@ -12,7 +12,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy Frontend and Worker
+    name: Deploy Frontend
     
     steps:
       - name: Checkout
@@ -21,7 +21,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10.28.2
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -33,7 +33,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Frontend
-        run: cd box-frontend && pnpm run build
+        run: pnpm run build
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
@@ -41,13 +41,4 @@ jobs:
           packageManager: pnpm
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy box-frontend/dist --project-name=fu78sion-box
-
-      - name: Deploy Worker
-        uses: cloudflare/wrangler-action@v3
-        with:
-          packageManager: pnpm
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: 'box-worker'
-          command: deploy
+          command: pages deploy dist --project-name=fu78sion-box

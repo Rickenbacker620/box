@@ -1,4 +1,8 @@
-packages:
-  - 'box-frontend'
-  - 'box-worker'
-  - 'box-worker-ely'
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true
