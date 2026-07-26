@@ -1,12 +1,12 @@
-import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { getProductImageUrl, productsQueryOptions } from '@/lib/queries'
-import { Card, CardContent } from '../ui/card'
-import { Loader2, Star } from 'lucide-react'
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getProductImageUrl, productsQueryOptions } from "@/lib/queries";
+import { Card, CardContent } from "../ui/card";
+import { Loader2, Star } from "lucide-react";
 
 interface ProductListProps {
-  selectedBrand?: string
-  selectedCategory?: string
+  selectedBrand?: string;
+  selectedCategory?: string;
 }
 
 export function ProductList({ selectedBrand, selectedCategory }: ProductListProps) {
@@ -14,26 +14,27 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
     data: productsData,
     isLoading: productsLoading,
     isError,
-  } = useQuery(productsQueryOptions)
+  } = useQuery(productsQueryOptions);
 
   // Filter products based on selected brand and category
   const filteredProducts = useMemo(() => {
-    return (productsData ?? []).filter(product => {
-      const matchesBrand = selectedBrand === undefined || product.brand === selectedBrand
-      const matchesCategory = selectedCategory === undefined || product.category === selectedCategory
-      return matchesBrand && matchesCategory
-    })
-  }, [productsData, selectedBrand, selectedCategory])
+    return (productsData ?? []).filter((product) => {
+      const matchesBrand = selectedBrand === undefined || product.brand === selectedBrand;
+      const matchesCategory =
+        selectedCategory === undefined || product.category === selectedCategory;
+      return matchesBrand && matchesCategory;
+    });
+  }, [productsData, selectedBrand, selectedCategory]);
 
-  const products = filteredProducts
-  const isLoading = productsLoading
+  const products = filteredProducts;
+  const isLoading = productsLoading;
 
   if (isLoading) {
     return (
       <div className="text-center py-8">
         <Loader2 className="h-8 w-8 animate-spin mx-auto" />
       </div>
-    )
+    );
   }
 
   if (isError) {
@@ -41,7 +42,7 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
       <div className="text-center py-8">
         <p className="text-destructive">Unable to load products.</p>
       </div>
-    )
+    );
   }
 
   if (products.length === 0) {
@@ -49,7 +50,7 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
       <div className="text-center py-8">
         <p className="text-muted-foreground">No products yet.</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -81,8 +82,8 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
                         key={star}
                         className={`h-4 w-4 ${
                           star <= (product.rating || 0)
-                            ? 'fill-yellow-400 text-yellow-400'
-                            : 'text-gray-300'
+                            ? "fill-yellow-400 text-yellow-400"
+                            : "text-gray-300"
                         }`}
                       />
                     ))}
@@ -98,5 +99,5 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
         </Card>
       ))}
     </div>
-  )
+  );
 }

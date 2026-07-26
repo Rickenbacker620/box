@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react"
-import { useQuery } from "@tanstack/react-query"
-import { brandsQueryOptions, productsQueryOptions } from "@/lib/queries"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { brandsQueryOptions, productsQueryOptions } from "@/lib/queries";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -13,18 +13,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface ProductFiltersProps {
-  selectedBrand?: string
-  selectedCategory?: string
-  onBrandChange: (brand?: string) => void
-  onCategoryChange: (category?: string) => void
+  selectedBrand?: string;
+  selectedCategory?: string;
+  onBrandChange: (brand?: string) => void;
+  onCategoryChange: (category?: string) => void;
 }
 
 export function ProductFilters({
@@ -33,31 +29,27 @@ export function ProductFilters({
   onBrandChange,
   onCategoryChange,
 }: ProductFiltersProps) {
-  const [brandOpen, setBrandOpen] = React.useState(false)
-  const [categoryOpen, setCategoryOpen] = React.useState(false)
+  const [brandOpen, setBrandOpen] = React.useState(false);
+  const [categoryOpen, setCategoryOpen] = React.useState(false);
 
-  const { data: brandsData } = useQuery(brandsQueryOptions)
-  const { data: productsData } = useQuery(productsQueryOptions)
+  const { data: brandsData } = useQuery(brandsQueryOptions);
+  const { data: productsData } = useQuery(productsQueryOptions);
 
   // Extract unique categories from products
   const categories = React.useMemo(() => {
-    const uniqueCategories = new Set<string>()
-    const products = productsData ?? []
-    products.forEach(product => {
+    const uniqueCategories = new Set<string>();
+    const products = productsData ?? [];
+    products.forEach((product) => {
       if (product.category) {
-        uniqueCategories.add(product.category)
+        uniqueCategories.add(product.category);
       }
-    })
-    return Array.from(uniqueCategories).sort()
-  }, [productsData])
+    });
+    return Array.from(uniqueCategories).sort();
+  }, [productsData]);
 
-  const selectedBrandLabel = selectedBrand
-    ? selectedBrand
-    : "All brands"
+  const selectedBrandLabel = selectedBrand ? selectedBrand : "All brands";
 
-  const selectedCategoryLabel = selectedCategory
-    ? selectedCategory
-    : "All categories"
+  const selectedCategoryLabel = selectedCategory ? selectedCategory : "All categories";
 
   return (
     <div className="flex flex-wrap gap-4">
@@ -84,14 +76,14 @@ export function ProductFilters({
                   <CommandItem
                     value=""
                     onSelect={() => {
-                      onBrandChange(undefined)
-                      setBrandOpen(false)
+                      onBrandChange(undefined);
+                      setBrandOpen(false);
                     }}
                   >
                     <CheckIcon
                       className={cn(
                         "mr-2 h-4 w-4",
-                        selectedBrand === undefined ? "opacity-100" : "opacity-0"
+                        selectedBrand === undefined ? "opacity-100" : "opacity-0",
                       )}
                     />
                     All brands
@@ -101,14 +93,14 @@ export function ProductFilters({
                       key={brand.id}
                       value={brand.name}
                       onSelect={() => {
-                        onBrandChange(brand.name)
-                        setBrandOpen(false)
+                        onBrandChange(brand.name);
+                        setBrandOpen(false);
                       }}
                     >
                       <CheckIcon
                         className={cn(
                           "mr-2 h-4 w-4",
-                          selectedBrand === brand.name ? "opacity-100" : "opacity-0"
+                          selectedBrand === brand.name ? "opacity-100" : "opacity-0",
                         )}
                       />
                       {brand.name}
@@ -144,14 +136,14 @@ export function ProductFilters({
                   <CommandItem
                     value=""
                     onSelect={() => {
-                      onCategoryChange(undefined)
-                      setCategoryOpen(false)
+                      onCategoryChange(undefined);
+                      setCategoryOpen(false);
                     }}
                   >
                     <CheckIcon
                       className={cn(
                         "mr-2 h-4 w-4",
-                        selectedCategory === undefined ? "opacity-100" : "opacity-0"
+                        selectedCategory === undefined ? "opacity-100" : "opacity-0",
                       )}
                     />
                     All categories
@@ -161,14 +153,14 @@ export function ProductFilters({
                       key={category}
                       value={category}
                       onSelect={() => {
-                        onCategoryChange(category)
-                        setCategoryOpen(false)
+                        onCategoryChange(category);
+                        setCategoryOpen(false);
                       }}
                     >
                       <CheckIcon
                         className={cn(
                           "mr-2 h-4 w-4",
-                          selectedCategory === category ? "opacity-100" : "opacity-0"
+                          selectedCategory === category ? "opacity-100" : "opacity-0",
                         )}
                       />
                       {category}
@@ -187,8 +179,8 @@ export function ProductFilters({
           <Button
             variant="ghost"
             onClick={() => {
-              onBrandChange(undefined)
-              onCategoryChange(undefined)
+              onBrandChange(undefined);
+              onCategoryChange(undefined);
             }}
             className="h-10"
           >
@@ -197,5 +189,5 @@ export function ProductFilters({
         </div>
       )}
     </div>
-  )
+  );
 }

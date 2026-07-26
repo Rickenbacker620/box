@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { productsQueryOptions } from './lib/queries'
-import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card'
-import { Badge } from './components/ui/badge'
-import { ProductList } from './components/products/ProductList'
-import { ProductFilters } from './components/products/ProductFilters'
-import { ModeToggle } from './components/mode-toggle'
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { productsQueryOptions } from "./lib/queries";
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
+import { Badge } from "./components/ui/badge";
+import { ProductList } from "./components/products/ProductList";
+import { ProductFilters } from "./components/products/ProductFilters";
+import { ModeToggle } from "./components/mode-toggle";
 
 function App() {
-  const [selectedBrand, setSelectedBrand] = useState<string | undefined>(undefined)
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined)
+  const [selectedBrand, setSelectedBrand] = useState<string | undefined>(undefined);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
 
-  const { data: productsData } = useQuery(productsQueryOptions)
+  const { data: productsData } = useQuery(productsQueryOptions);
 
-  const products = productsData ?? []
+  const products = productsData ?? [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -38,7 +38,7 @@ function App() {
             <div className="flex items-center justify-between">
               <CardTitle>Products</CardTitle>
               <Badge variant="secondary">
-                {products.length} {products.length === 1 ? 'item' : 'items'}
+                {products.length} {products.length === 1 ? "item" : "items"}
               </Badge>
             </div>
           </CardHeader>
@@ -50,18 +50,14 @@ function App() {
               onBrandChange={setSelectedBrand}
               onCategoryChange={setSelectedCategory}
             />
-            
+
             {/* Product List */}
-            <ProductList
-              selectedBrand={selectedBrand}
-              selectedCategory={selectedCategory}
-            />
+            <ProductList selectedBrand={selectedBrand} selectedCategory={selectedCategory} />
           </CardContent>
         </Card>
-
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
