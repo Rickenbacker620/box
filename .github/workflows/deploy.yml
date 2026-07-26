@@ -51,7 +51,3 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: 'box-worker'
           command: deploy
-          secrets: |
-            AUTH_TOKEN
-        env:
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}

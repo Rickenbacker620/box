@@ -20,21 +20,11 @@ const app = new Elysia({
       info: {
         title: 'Product Box API',
         version: '1.0.0',
-        description: 'API for managing a collection of products with ratings and reviews',
+        description: 'Read-only API for browsing a collection of products with ratings and reviews',
       },
       servers: [
         { url: 'http://localhost:8787', description: 'Local Development Server' },
       ],
-      components: {
-        securitySchemes: {
-          bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'password',
-            description: 'Enter your API password',
-          },
-        },
-      },
     },
   }))
 

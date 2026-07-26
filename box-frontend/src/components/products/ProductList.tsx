@@ -1,26 +1,9 @@
-import { useState, useMemo } from 'react'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  getProductsOptions,
-  putProductsByIdMutation,
-  deleteProductsByIdMutation,
-  getProductsQueryKey,
-} from '@/client/@tanstack/react-query.gen'
-import { Button } from '../ui/button'
+import { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getProductsOptions } from '@/client/@tanstack/react-query.gen'
 import { Card, CardContent } from '../ui/card'
 import { Loader2, Star } from 'lucide-react'
 import { config } from '@/config'
-import { UpdateProductModal } from './UpdateProductModal'
-
-type Product = {
-  id: string
-  name: string
-  brand: string
-  category: string
-  rating: number
-  comment?: string | null
-  imageUrl?: string | null
-}
 
 interface ProductListProps {
   selectedBrand?: string
@@ -28,37 +11,7 @@ interface ProductListProps {
 }
 
 export function ProductList({ selectedBrand, selectedCategory }: ProductListProps) {
-  const queryClient = useQueryClient()
   const { data: productsData, isLoading: productsLoading } = useQuery(getProductsOptions())
-  const [updateModalOpen, setUpdateModalOpen] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-
-  const updateProductMutation = useMutation({
-    ...putProductsByIdMutation(),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: getProductsQueryKey() })
-    },
-  })
-
-  const deleteProductMutation = useMutation({
-    ...deleteProductsByIdMutation(),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: getProductsQueryKey() })
-    },
-  })
-
-  const handleUpdateClick = (product: Product) => {
-    setSelectedProduct(product)
-    setUpdateModalOpen(true)
-  }
-
-  const handleDeleteProduct = (id: string) => {
-    if (confirm('Are you sure you want to delete this product?')) {
-      deleteProductMutation.mutate({
-        path: { id },
-      })
-    }
-  }
 
   const allProducts = productsData?.products || []
   
@@ -72,7 +25,7 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
   }, [allProducts, selectedBrand, selectedCategory])
 
   const products = filteredProducts
-  const isLoading = productsLoading || updateProductMutation.isPending || deleteProductMutation.isPending
+  const isLoading = productsLoading
 
   if (isLoading) {
     return (
@@ -85,7 +38,7 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
   if (products.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-muted-foreground">No products yet. Create one to get started.</p>
+        <p className="text-muted-foreground">No products yet.</p>
       </div>
     )
   }
@@ -131,31 +84,10 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
                   <p className="mt-2 text-sm text-muted-foreground italic">{product.comment}</p>
                 )}
               </div>
-              <div className="flex gap-2 shrink-0">
-                <Button
-                  onClick={() => handleUpdateClick(product)}
-                  variant="outline"
-                  size="sm"
-                >
-                  Update
-                </Button>
-                <Button
-                  onClick={() => handleDeleteProduct(product.id)}
-                  variant="destructive"
-                  size="sm"
-                >
-                  Delete
-                </Button>
-              </div>
             </div>
           </CardContent>
         </Card>
       ))}
-      <UpdateProductModal
-        open={updateModalOpen}
-        onOpenChange={setUpdateModalOpen}
-        product={selectedProduct}
-      />
     </div>
   )
 }
