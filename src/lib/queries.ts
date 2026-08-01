@@ -13,7 +13,6 @@ export interface Product {
   category: string;
   rating: number;
   comment: string | null;
-  imageUrl: string | null;
 }
 
 interface ProductRow {
@@ -22,7 +21,6 @@ interface ProductRow {
   category: string;
   rating: number;
   comment: string | null;
-  image_url: string | null;
   brands:
     | {
         name: string;
@@ -52,7 +50,6 @@ async function fetchProducts(): Promise<Product[]> {
       category,
       rating,
       comment,
-      image_url,
       brands (name)
     `)
     .order("name");
@@ -70,7 +67,6 @@ async function fetchProducts(): Promise<Product[]> {
     category: product.category,
     rating: product.rating,
     comment: product.comment,
-    imageUrl: product.image_url,
   }));
 }
 
@@ -83,7 +79,3 @@ export const productsQueryOptions = queryOptions({
   queryKey: ["products"],
   queryFn: fetchProducts,
 });
-
-export function getProductImageUrl(path: string) {
-  return supabase.storage.from("box-assets").getPublicUrl(path).data.publicUrl;
-}

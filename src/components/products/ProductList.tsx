@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getProductImageUrl, productsQueryOptions } from "@/lib/queries";
+import { productsQueryOptions } from "@/lib/queries";
 import { Card, CardContent } from "../ui/card";
 import { Loader2, Star } from "lucide-react";
 
@@ -59,15 +59,6 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
         <Card key={product.id} className="hover:shadow-md transition-shadow">
           <CardContent className="p-4">
             <div className="flex items-start justify-between gap-4">
-              {product.imageUrl && (
-                <div className="shrink-0">
-                  <img
-                    src={getProductImageUrl(product.imageUrl)}
-                    alt={product.name}
-                    className="w-24 h-24 object-cover rounded"
-                  />
-                </div>
-              )}
               <div className="flex-1">
                 <h3 className="font-bold text-lg">{product.name}</h3>
                 <div className="flex gap-2 mt-1 text-sm opacity-70">
