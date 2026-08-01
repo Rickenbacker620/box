@@ -15,6 +15,14 @@ export interface Product {
   comment: string | null;
 }
 
+export interface BestPrice {
+  id: string;
+  name: string;
+  lowestPrice: number;
+  unit: string;
+  comments: string | null;
+}
+
 interface ProductRow {
   id: string;
   name: string;
@@ -70,6 +78,25 @@ async function fetchProducts(): Promise<Product[]> {
   }));
 }
 
+async function fetchBestPrices(): Promise<BestPrice[]> {
+  const { data, error } = await supabase
+    .from("best_prices")
+    .select("id, name, lowest_price, unit, comments")
+    .order("name");
+
+  if (error) {
+    throw error;
+  }
+
+  return data.map((price) => ({
+    id: price.id,
+    name: price.name,
+    lowestPrice: Number(price.lowest_price),
+    unit: price.unit,
+    comments: price.comments,
+  }));
+}
+
 export const brandsQueryOptions = queryOptions({
   queryKey: ["brands"],
   queryFn: fetchBrands,
@@ -78,4 +105,9 @@ export const brandsQueryOptions = queryOptions({
 export const productsQueryOptions = queryOptions({
   queryKey: ["products"],
   queryFn: fetchProducts,
+});
+
+export const bestPricesQueryOptions = queryOptions({
+  queryKey: ["best-prices"],
+  queryFn: fetchBestPrices,
 });

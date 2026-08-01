@@ -210,6 +210,7 @@
   .catalog-title em { color: color-mix(in oklch, var(--foreground) 63%, var(--background)); font-weight: 400; }
   .catalog-description { max-width: 20rem; margin-top: 1.5rem; color: var(--muted-foreground); font-size: .93rem; line-height: 1.55; }
   .catalog-count { display: flex; align-items: baseline; gap: .65rem; padding-bottom: .45rem; border-bottom: 1px solid var(--border); color: var(--muted-foreground); font: .7rem var(--font-mono); white-space: nowrap; }
+  .catalog-stats { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .75rem 1.5rem; }
   .catalog-count strong { color: var(--foreground); font: 400 1.7rem/1 var(--font-serif); }
   .catalog-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--foreground); }
   .catalog-toolbar h2 { font: 500 .72rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
@@ -233,11 +234,30 @@
   .catalog-status, .catalog-empty { display: grid; place-items: center; min-height: 18rem; color: var(--muted-foreground); font-size: .88rem; }
   .catalog-empty { gap: .7rem; }
   .catalog-empty span { color: var(--foreground); font: 400 5rem/.8 var(--font-serif); }
+  .price-caption { margin-top: .45rem; color: var(--muted-foreground); font-size: .78rem; }
+  .price-label { color: var(--muted-foreground); font: .64rem var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+  .price-list { border-bottom: 1px solid var(--border); }
+  .price-entry { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr) auto; align-items: center; gap: 1rem; min-height: 6.25rem; border-bottom: 1px solid var(--border); transition: background-color .25s ease, padding .25s ease; }
+  .price-entry:last-child { border-bottom: 0; }
+  .price-entry:hover { background: color-mix(in oklch, var(--foreground) 4%, transparent); padding-inline: .7rem; }
+  .price-number { color: var(--muted-foreground); font: .65rem var(--font-mono); }
+  .price-entry h3 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 1rem; font-weight: 500; letter-spacing: -.02em; }
+  .price-comment { display: flex; align-items: center; gap: .35rem; margin-top: .42rem; overflow: hidden; color: var(--muted-foreground); font: .69rem var(--font-mono); text-overflow: ellipsis; white-space: nowrap; }
+  .price-comment svg { width: .7rem; height: .7rem; flex: none; }
+  .price-amount { display: flex; align-items: baseline; gap: .3rem; color: var(--muted-foreground); font: .72rem var(--font-mono); white-space: nowrap; }
+  .price-amount strong { color: var(--foreground); font: 400 clamp(1.55rem, 3vw, 2.1rem)/1 var(--font-serif); letter-spacing: -.04em; }
+  .price-status, .price-empty { display: grid; place-items: center; min-height: 12rem; color: var(--muted-foreground); }
+  .price-empty { align-content: center; gap: .35rem; text-align: center; font-size: .88rem; }
+  .price-empty span { color: var(--foreground); font: 400 3rem/.9 var(--font-serif); }
+  .price-empty small { font: .68rem var(--font-mono); }
   @media (max-width: 640px) {
     .catalog-toolbar { align-items: flex-start; flex-direction: column; }
     .product-entry { grid-template-columns: 1.8rem 2.55rem minmax(0, 1fr); gap: .7rem; min-height: 6.5rem; }
     .product-swatch { width: 2.55rem; height: 2.55rem; }
     .product-rating { grid-column: 3; grid-row: 2; flex-direction: row; justify-content: flex-start; align-items: center; margin-top: -.8rem; }
     .product-comment { display: none; }
+    .catalog-stats { justify-content: flex-start; }
+    .price-entry { grid-template-columns: 1.8rem minmax(0, 1fr); gap: .7rem; min-height: 7rem; }
+    .price-amount { grid-column: 2; grid-row: 2; margin-top: -.8rem; }
   }
 }
