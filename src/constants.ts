@@ -6,13 +6,15 @@ export const PRODUCT_CATEGORIES = [
   "ice-cream",
   "drink",
   "fragrance",
+  "perfume",
   "personal-care",
+  "shampoo",
+  "body-wash",
   "beauty",
   "household",
   "electronics",
   "instant",
   "yogurt",
-  "other",
 ] as const;
 
 export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];

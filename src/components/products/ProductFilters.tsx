@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
+import { CheckIcon, ChevronsUpDownIcon, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { brandsQueryOptions, productsQueryOptions } from "@/lib/queries";
 import { cn } from "@/lib/utils";
@@ -52,7 +52,7 @@ export function ProductFilters({
   const selectedCategoryLabel = selectedCategory ? selectedCategory : "All categories";
 
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="flex flex-wrap items-center gap-2">
       {/* Brand Filter */}
       <div className="space-y-2">
         <Popover open={brandOpen} onOpenChange={setBrandOpen}>
@@ -61,7 +61,7 @@ export function ProductFilters({
               variant="outline"
               role="combobox"
               aria-expanded={brandOpen}
-              className="w-[200px] justify-between"
+              className="catalog-filter w-[172px] justify-between"
             >
               {selectedBrandLabel}
               <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -121,7 +121,7 @@ export function ProductFilters({
               variant="outline"
               role="combobox"
               aria-expanded={categoryOpen}
-              className="w-[200px] justify-between"
+              className="catalog-filter w-[172px] justify-between"
             >
               {selectedCategoryLabel}
               <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -182,9 +182,9 @@ export function ProductFilters({
               onBrandChange(undefined);
               onCategoryChange(undefined);
             }}
-            className="h-10"
+            className="catalog-clear h-9"
           >
-            Clear filters
+            <X className="size-3" /> Clear
           </Button>
         </div>
       )}

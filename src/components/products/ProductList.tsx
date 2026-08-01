@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { productsQueryOptions } from "@/lib/queries";
-import { Card, CardContent } from "../ui/card";
 import { Loader2, Star } from "lucide-react";
 
 interface ProductListProps {
@@ -31,15 +30,15 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
 
   if (isLoading) {
     return (
-      <div className="text-center py-8">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto" />
+      <div className="catalog-status">
+        <Loader2 className="h-6 w-6 animate-spin mx-auto" />
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="text-center py-8">
+      <div className="catalog-status">
         <p className="text-destructive">Unable to load products.</p>
       </div>
     );
@@ -47,47 +46,31 @@ export function ProductList({ selectedBrand, selectedCategory }: ProductListProp
 
   if (products.length === 0) {
     return (
-      <div className="text-center py-8">
-        <p className="text-muted-foreground">No products yet.</p>
+      <div className="catalog-empty">
+        <span>0</span>
+        <p>No products match this view.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      {products.map((product) => (
-        <Card key={product.id} className="hover:shadow-md transition-shadow">
-          <CardContent className="p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1">
-                <h3 className="font-bold text-lg">{product.name}</h3>
-                <div className="flex gap-2 mt-1 text-sm opacity-70">
-                  <span>{product.brand}</span>
-                  <span>•</span>
-                  <span className="capitalize">{product.category}</span>
-                </div>
-                <div className="mt-2 flex items-center gap-2">
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`h-4 w-4 ${
-                          star <= (product.rating || 0)
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-300"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm">({product.rating || 0}/5)</span>
-                </div>
-                {product.comment && (
-                  <p className="mt-2 text-sm text-muted-foreground italic">{product.comment}</p>
-                )}
-              </div>
+    <div className="catalog-list">
+      {products.map((product, index) => (
+        <article key={product.id} className="product-entry">
+          <span className="product-number">{String(index + 1).padStart(2, "0")}</span>
+          <div className="product-swatch" aria-hidden="true">{product.name.slice(0, 1)}</div>
+          <div className="min-w-0">
+            <h3 className="product-name">{product.name}</h3>
+            <p className="product-meta"><span>{product.brand}</span><i /> <span className="capitalize">{product.category}</span></p>
+            {product.comment && <p className="product-comment">{product.comment}</p>}
+          </div>
+          <div className="product-rating" aria-label={`${product.rating || 0} out of 5 stars`}>
+            <div className="flex gap-0.5">
+              {[1, 2, 3, 4, 5].map((star) => <Star key={star} className={star <= (product.rating || 0) ? "fill-current" : "opacity-20"} />)}
             </div>
-          </CardContent>
-        </Card>
+            <span>{(product.rating || 0).toFixed(1)}</span>
+          </div>
+        </article>
       ))}
     </div>
   );
