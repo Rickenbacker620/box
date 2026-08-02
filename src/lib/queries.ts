@@ -23,6 +23,13 @@ export interface BestPrice {
   comments: string | null;
 }
 
+export interface Essential {
+  id: string;
+  name: string;
+  brand: string;
+  categories: string[];
+}
+
 interface ProductRow {
   id: string;
   name: string;
@@ -97,6 +104,24 @@ async function fetchBestPrices(): Promise<BestPrice[]> {
   }));
 }
 
+async function fetchEssentials(): Promise<Essential[]> {
+  const { data, error } = await supabase
+    .from("essentials")
+    .select("id, name, brand, categories")
+    .order("name");
+
+  if (error) {
+    throw error;
+  }
+
+  return data.map((essential) => ({
+    id: essential.id,
+    name: essential.name,
+    brand: essential.brand,
+    categories: essential.categories,
+  }));
+}
+
 export const brandsQueryOptions = queryOptions({
   queryKey: ["brands"],
   queryFn: fetchBrands,
@@ -110,4 +135,9 @@ export const productsQueryOptions = queryOptions({
 export const bestPricesQueryOptions = queryOptions({
   queryKey: ["best-prices"],
   queryFn: fetchBestPrices,
+});
+
+export const essentialsQueryOptions = queryOptions({
+  queryKey: ["essentials"],
+  queryFn: fetchEssentials,
 });

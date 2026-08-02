@@ -250,6 +250,20 @@
   .price-empty { align-content: center; gap: .35rem; text-align: center; font-size: .88rem; }
   .price-empty span { color: var(--foreground); font: 400 3rem/.9 var(--font-serif); }
   .price-empty small { font: .68rem var(--font-mono); }
+  .essential-list { border-bottom: 1px solid var(--border); }
+  .essential-entry { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr) auto; align-items: center; gap: 1rem; min-height: 6.25rem; border-bottom: 1px solid var(--border); transition: background-color .25s ease, padding .25s ease; }
+  .essential-entry:last-child { border-bottom: 0; }
+  .essential-entry:hover { background: color-mix(in oklch, var(--foreground) 4%, transparent); padding-inline: .7rem; }
+  .essential-number { color: var(--muted-foreground); font: .65rem var(--font-mono); }
+  .essential-entry h3 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 1rem; font-weight: 500; letter-spacing: -.02em; }
+  .essential-entry p { margin-top: .42rem; color: var(--muted-foreground); font: .69rem var(--font-mono); }
+  .essential-categories { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .35rem; }
+  .essential-badge { gap: .3rem; border-radius: 999px; font: .62rem var(--font-mono); text-transform: uppercase; letter-spacing: .04em; }
+  .essential-badge svg { width: .7rem; height: .7rem; }
+  .essential-status, .essential-empty { display: grid; place-items: center; min-height: 12rem; color: var(--muted-foreground); }
+  .essential-empty { align-content: center; gap: .35rem; text-align: center; font-size: .88rem; }
+  .essential-empty span { color: var(--foreground); font: 400 3rem/.9 var(--font-serif); }
+  .essential-empty small { font: .68rem var(--font-mono); }
   @media (max-width: 640px) {
     .catalog-toolbar { align-items: flex-start; flex-direction: column; }
     .product-entry { grid-template-columns: 1.8rem 2.55rem minmax(0, 1fr); gap: .7rem; min-height: 6.5rem; }
@@ -259,5 +273,7 @@
     .catalog-stats { justify-content: flex-start; }
     .price-entry { grid-template-columns: 1.8rem minmax(0, 1fr); gap: .7rem; min-height: 7rem; }
     .price-amount { grid-column: 2; grid-row: 2; margin-top: -.8rem; }
+    .essential-entry { grid-template-columns: 1.8rem minmax(0, 1fr); gap: .7rem; min-height: 7rem; }
+    .essential-categories { grid-column: 2; grid-row: 2; justify-content: flex-start; margin-top: -.8rem; }
   }
 }

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { bestPricesQueryOptions, productsQueryOptions } from "./lib/queries";
+import { bestPricesQueryOptions, essentialsQueryOptions, productsQueryOptions } from "./lib/queries";
 import { ProductList } from "./components/products/ProductList";
 import { ProductFilters } from "./components/products/ProductFilters";
 import { BestPriceList } from "./components/prices/BestPriceList";
+import { EssentialList } from "./components/essentials/EssentialList";
 import { ModeToggle } from "./components/mode-toggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 
@@ -13,9 +14,11 @@ function App() {
 
   const { data: productsData } = useQuery(productsQueryOptions);
   const { data: bestPricesData } = useQuery(bestPricesQueryOptions);
+  const { data: essentialsData } = useQuery(essentialsQueryOptions);
 
   const products = productsData ?? [];
   const bestPrices = bestPricesData ?? [];
+  const essentials = essentialsData ?? [];
 
   return (
     <div className="min-h-screen bg-background selection:bg-primary selection:text-primary-foreground">
@@ -37,6 +40,7 @@ function App() {
             <div className="catalog-stats">
               <p className="catalog-count"><strong>{String(products.length).padStart(2, "0")}</strong><span>{products.length === 1 ? "item logged" : "items logged"}</span></p>
               <p className="catalog-count"><strong>{String(bestPrices.length).padStart(2, "0")}</strong><span>{bestPrices.length === 1 ? "price note" : "price notes"}</span></p>
+              <p className="catalog-count"><strong>{String(essentials.length).padStart(2, "0")}</strong><span>{essentials.length === 1 ? "essential" : "essentials"}</span></p>
             </div>
           </div>
         </section>
@@ -45,6 +49,7 @@ function App() {
           <TabsList variant="line" aria-label="Catalog sections">
             <TabsTrigger value="products">Collection</TabsTrigger>
             <TabsTrigger value="prices">Price notes</TabsTrigger>
+            <TabsTrigger value="essentials">Essentials</TabsTrigger>
           </TabsList>
 
           <TabsContent value="products" className="mt-8">
@@ -72,6 +77,19 @@ function App() {
                 <span className="price-label">Best known</span>
               </div>
               <BestPriceList />
+            </section>
+          </TabsContent>
+
+          <TabsContent value="essentials" className="mt-8">
+            <section aria-labelledby="essentials-heading">
+              <div className="catalog-toolbar">
+                <div>
+                  <h2 id="essentials-heading">Essentials</h2>
+                  <p className="price-caption">The things to keep close for home, travel and moving.</p>
+                </div>
+                <span className="price-label">Ready list</span>
+              </div>
+              <EssentialList />
             </section>
           </TabsContent>
         </Tabs>
