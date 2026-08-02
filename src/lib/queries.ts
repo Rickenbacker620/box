@@ -30,6 +30,13 @@ export interface Essential {
   categories: string[];
 }
 
+export interface FlightFare {
+  id: string;
+  route: string;
+  flightNumber: string;
+  lowestPrice: string;
+}
+
 interface ProductRow {
   id: string;
   name: string;
@@ -122,6 +129,25 @@ async function fetchEssentials(): Promise<Essential[]> {
   }));
 }
 
+async function fetchFlightFares(): Promise<FlightFare[]> {
+  const { data, error } = await supabase
+    .from("flight_fares")
+    .select("id, route, flight_number, lowest_price")
+    .order("route")
+    .order("lowest_price");
+
+  if (error) {
+    throw error;
+  }
+
+  return data.map((fare) => ({
+    id: fare.id,
+    route: fare.route,
+    flightNumber: fare.flight_number,
+    lowestPrice: fare.lowest_price,
+  }));
+}
+
 export const brandsQueryOptions = queryOptions({
   queryKey: ["brands"],
   queryFn: fetchBrands,
@@ -140,4 +166,9 @@ export const bestPricesQueryOptions = queryOptions({
 export const essentialsQueryOptions = queryOptions({
   queryKey: ["essentials"],
   queryFn: fetchEssentials,
+});
+
+export const flightFaresQueryOptions = queryOptions({
+  queryKey: ["flight-fares"],
+  queryFn: fetchFlightFares,
 });

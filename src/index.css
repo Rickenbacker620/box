@@ -264,6 +264,16 @@
   .essential-empty { align-content: center; gap: .35rem; text-align: center; font-size: .88rem; }
   .essential-empty span { color: var(--foreground); font: 400 3rem/.9 var(--font-serif); }
   .essential-empty small { font: .68rem var(--font-mono); }
+  .fare-table { border-bottom: 1px solid var(--border); }
+  .fare-table th { height: 3.1rem; padding-inline: .75rem; color: var(--muted-foreground); font: .65rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .fare-table td { height: 4.5rem; padding-inline: .75rem; }
+  .fare-route { font: 500 .92rem var(--font-sans); letter-spacing: -.02em; }
+  .fare-number { color: var(--muted-foreground); font: .72rem var(--font-mono); }
+  .fare-price { font: 400 1.45rem/1 var(--font-serif); letter-spacing: -.03em; }
+  .fare-status, .fare-empty { display: grid; place-items: center; min-height: 12rem; color: var(--muted-foreground); }
+  .fare-empty { align-content: center; gap: .35rem; text-align: center; font-size: .88rem; }
+  .fare-empty span { color: var(--foreground); font: 400 3rem/.9 var(--font-serif); }
+  .fare-empty small { font: .68rem var(--font-mono); }
   @media (max-width: 640px) {
     .catalog-toolbar { align-items: flex-start; flex-direction: column; }
     .product-entry { grid-template-columns: 1.8rem 2.55rem minmax(0, 1fr); gap: .7rem; min-height: 6.5rem; }

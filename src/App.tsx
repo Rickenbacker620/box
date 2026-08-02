@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { bestPricesQueryOptions, essentialsQueryOptions, productsQueryOptions } from "./lib/queries";
+import { bestPricesQueryOptions, essentialsQueryOptions, flightFaresQueryOptions, productsQueryOptions } from "./lib/queries";
 import { ProductList } from "./components/products/ProductList";
 import { ProductFilters } from "./components/products/ProductFilters";
 import { BestPriceList } from "./components/prices/BestPriceList";
 import { EssentialList } from "./components/essentials/EssentialList";
+import { FlightFareList } from "./components/flights/FlightFareList";
 import { ModeToggle } from "./components/mode-toggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 
@@ -15,10 +16,12 @@ function App() {
   const { data: productsData } = useQuery(productsQueryOptions);
   const { data: bestPricesData } = useQuery(bestPricesQueryOptions);
   const { data: essentialsData } = useQuery(essentialsQueryOptions);
+  const { data: flightFaresData } = useQuery(flightFaresQueryOptions);
 
   const products = productsData ?? [];
   const bestPrices = bestPricesData ?? [];
   const essentials = essentialsData ?? [];
+  const flightFares = flightFaresData ?? [];
 
   return (
     <div className="min-h-screen bg-background selection:bg-primary selection:text-primary-foreground">
@@ -41,6 +44,7 @@ function App() {
               <p className="catalog-count"><strong>{String(products.length).padStart(2, "0")}</strong><span>{products.length === 1 ? "item logged" : "items logged"}</span></p>
               <p className="catalog-count"><strong>{String(bestPrices.length).padStart(2, "0")}</strong><span>{bestPrices.length === 1 ? "price note" : "price notes"}</span></p>
               <p className="catalog-count"><strong>{String(essentials.length).padStart(2, "0")}</strong><span>{essentials.length === 1 ? "essential" : "essentials"}</span></p>
+              <p className="catalog-count"><strong>{String(flightFares.length).padStart(2, "0")}</strong><span>{flightFares.length === 1 ? "flight fare" : "flight fares"}</span></p>
             </div>
           </div>
         </section>
@@ -50,6 +54,7 @@ function App() {
             <TabsTrigger value="products">Collection</TabsTrigger>
             <TabsTrigger value="prices">Price notes</TabsTrigger>
             <TabsTrigger value="essentials">Essentials</TabsTrigger>
+            <TabsTrigger value="flights">Flights</TabsTrigger>
           </TabsList>
 
           <TabsContent value="products" className="mt-8">
@@ -90,6 +95,19 @@ function App() {
                 <span className="price-label">Ready list</span>
               </div>
               <EssentialList />
+            </section>
+          </TabsContent>
+
+          <TabsContent value="flights" className="mt-8">
+            <section aria-labelledby="flights-heading">
+              <div className="catalog-toolbar">
+                <div>
+                  <h2 id="flights-heading">Flight fares</h2>
+                  <p className="price-caption">The lowest fares you have personally recorded.</p>
+                </div>
+                <span className="price-label">Manual log</span>
+              </div>
+              <FlightFareList />
             </section>
           </TabsContent>
         </Tabs>
